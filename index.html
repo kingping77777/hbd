@@ -1,272 +1,1080 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>HBD</title>
-    <link type="text/css" rel="stylesheet" href="./file/default.css" />
-    <script type="text/javascript" src="./file/jquery.min.js"></script>
-    <script type="text/javascript" src="./file/jscex.min.js"></script>
-    <script type="text/javascript" src="./file/jscex-parser.js"></script>
-    <script type="text/javascript" src="./file/jscex-jit.js"></script>
-    <script
-      type="text/javascript"
-      src="./file/jscex-builderbase.min.js"
-    ></script>
-    <script type="text/javascript" src="./file/jscex-async.min.js"></script>
-    <script
-      type="text/javascript"
-      src="./file/jscex-async-powerpack.min.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="./file/functions.js"
-      charset="utf-8"
-    ></script>
-    <script
-      type="text/javascript"
-      src="./file/love.js"
-      charset="utf-8"
-    ></script>
-    <script>
-      function playAudio() {
-        var audio = document.getElementById("myAudio");
-        audio.play();
-      }
-    </script>
-  </head>
-  <body>
-    <div id="main">
-      <div id="error">
-        <a
-          href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html?hl=zh-CN&brand=CHMI"
-          >Chrome</a
-        >
-        (<a href="http://firefox.com.cn/download/">Firefox</a>)
-      </div>
-      <audio autoplay="autoplay" height="100" width="100" id="myAudio">
-        <source src="aud.mp3" type="audio/mp3" />
-        <embed height="100" width="100" src="aud.mp3" />
-      </audio>
-      <div id="wrap">
-        <div id="text">
-          <div id="code">
-            <span class="say">Wishing you a beautiful day 💫</span><br />
-            <span class="say">Happy Birthday 🎉</span><br />
-            <span class="say">May you be blessed with joy and peace 🌟</span
-            ><br />
-            <span class="say"
-              >And may your heart be filled with happiness 💕</span
-            ><br />
-            <span class="say">You are truly appreciated ❤️</span><br />
-            <span class="say">Wishing you love and smiles always 🥰</span><br />
-            <span class="say">Hope your day is as amazing as you are 🎂✨</span
-            ><br />
-          </div>
-        </div>
-        <div id="clock-box">
-          <span id="clock">577 days 0 hours 0 minutes 0 seconds</span>
-          <!-- Change to "6940 days..." if needed -->
-        </div>
-        <canvas id="canvas" width="1100" height="680"></canvas>
-      </div>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Birthday – Tree & Cake</title>
+
+<link type="text/css" rel="stylesheet" href="./file/default.css" />
+
+<script src="./file/jquery.min.js"></script>
+<script src="./file/jscex.min.js"></script>
+<script src="./file/jscex-parser.js"></script>
+<script src="./file/jscex-jit.js"></script>
+<script src="./file/jscex-builderbase.min.js"></script>
+<script src="./file/jscex-async.min.js"></script>
+<script src="./file/jscex-async-powerpack.min.js"></script>
+<script src="./file/functions.js"></script>
+<script src="./file/love.js"></script>
+
+<style>
+/* ===== GLOBAL ===== */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;   /* ✅ ENABLE SCROLL */
+  background: #000;
+}
+
+/* ===== TREE SECTION ===== */
+#tree-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: url("img2.png") no-repeat center center;
+  background-size: cover;
+  overflow: hidden;
+}
+
+#canvas {
+  display: block;
+  margin: 0 auto;
+}
+
+/* ===== TEXT ===== */
+#text {
+  position: absolute;
+  top: 18%;
+  left: 6%;
+  color: white;
+  z-index: 5;
+}
+
+#code {
+  display: none;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* ===== CAKE SECTION ===== */
+#cake-section {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0b1d3a, #000);
+  display: block;           /* ✅ IMPORTANT */
+  padding: 80px 0;          /* ✅ SPACE */
+  color: white;
+}
+
+
+
+/* Cake */
+.cake {
+  position: relative;
+  width: 200px;
+}
+
+.layer {
+  width: 200px;
+  height: 50px;
+  background: #ffb703;
+  border-radius: 10px;
+  margin-bottom: 5px;
+}
+
+.layer.top {
+  background: #fb8500;
+}
+
+.candle {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 30px;
+  background: white;
+}
+
+/* 🔥 SVG flame (FIXED & SAFE) */
+.flame {
+  fill: orange;
+  animation: flamePulse 0.45s infinite alternate;
+  filter: drop-shadow(0 0 8px rgba(255,180,0,0.8));
+}
+
+@keyframes flamePulse {
+  0% {
+    r: 5;
+    opacity: 1;
+  }
+  100% {
+    r: 7;
+    opacity: 0.7;
+  }
+}
+
+
+@keyframes flicker {
+  0%,100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.2); }
+}
+
+/* Mobile */
+@media (max-width:768px){
+  #code { font-size: 15px; }
+  #cake-title { font-size: 26px; }
+}
+
+/* ===== BEAUTIFUL CAKE ===== */
+
+.cake-wrapper {
+  position: relative;
+  width: 220px;
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+
+.flame {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  background: radial-gradient(circle, #ffd166, orange);
+  border-radius: 50%;
+  animation: flicker 0.4s infinite;
+  box-shadow: 0 0 15px rgba(255,180,0,0.8);
+}
+
+@keyframes flicker {
+  0%,100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.2); }
+}
+/* 🎂 Cake animations */
+#cake-svg {
+  animation: cake-float 3s ease-in-out infinite;
+}
+
+@keyframes cake-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Candle flicker */
+#cake-svg circle {
+  animation: flame-flicker 0.4s infinite alternate;
+}
+
+@keyframes flame-flicker {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0.7;
+    transform: scale(1.2);
+  }
+}
+/* ✨ Sparkles */
+.cake-wrapper::before,
+.cake-wrapper::after {
+  content: "✨";
+  position: absolute;
+  font-size: 20px;
+  animation: sparkle 2s infinite;
+}
+
+.cake-wrapper::before {
+  top: -10px;
+  left: -20px;
+}
+
+.cake-wrapper::after {
+  bottom: 10px;
+  right: -20px;
+  animation-delay: 1s;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* 🎂 Floating cake */
+#cake-svg {
+  animation: cakeFloat 3.5s ease-in-out infinite;
+  transition: transform 0.25s ease;
+}
+
+@keyframes cakeFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* 🔥 Candle flames */
+.flame {
+  fill: url(#flameGrad);
+  animation: flameFlicker 0.4s infinite alternate;
+  filter: drop-shadow(0 0 10px rgba(255,180,0,0.9));
+}
+
+@keyframes flameFlicker {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.25);
+    opacity: 0.7;
+  }
+}
+/* 🔥 SVG flame animation (SAFE) */
+.flame {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: flameFlicker 0.35s infinite alternate;
+  filter: drop-shadow(0 0 8px rgba(255,180,0,0.9));
+}
+
+@keyframes flameFlicker {
+  from {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+}
+.candle {
+  animation: candleWiggle 2s ease-in-out infinite;
+}
+
+@keyframes candleWiggle {
+  0%,100% { transform: rotate(0deg); }
+  50% { transform: rotate(1deg); }
+}
+
+
+/* ✨ Sparkles */
+.cake-wrapper::before,
+.cake-wrapper::after {
+  content: "✨";
+  position: absolute;
+  font-size: 22px;
+  animation: sparkle 2s infinite;
+}
+
+.cake-wrapper::before {
+  top: -20px;
+  left: -30px;
+}
+
+.cake-wrapper::after {
+  bottom: 20px;
+  right: -30px;
+  animation-delay: 1s;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+ /* 🎂 Cake animation */
+.cake-svg {
+  animation: cakeFloat 2.5s ease-in-out infinite;
+}
+
+@keyframes cakeFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* 🔥 Candle flames */
+.flame {
+  fill: radial-gradient(circle, #fff3b0, #ffd166, orange);
+  animation: flameDance 0.4s infinite alternate;
+  filter: drop-shadow(0 0 12px rgba(255,180,0,0.9));
+}
+
+@keyframes flameDance {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.25);
+    opacity: 0.75;
+  }
+}
+/* 🔥 SVG flame animation */
+.flame {
+  fill: orange;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: flameFlicker 0.4s infinite alternate;
+  filter: drop-shadow(0 0 8px rgba(255,180,0,0.9));
+}
+
+@keyframes flameFlicker {
+  from {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+}
+/* ===== BALLOONS ===== */
+
+.balloon {
+  position: absolute;
+  width: 65px;
+  height: 85px;
+  background: red;
+  border-radius: 50% 50% 45% 45%;
+  box-shadow:
+      inset -10px -15px rgba(0,0,0,0.2),
+      0 0 20px rgba(255,215,0,0.5);
+  animation: sway 4s ease-in-out infinite,
+             balloonShine 2s infinite alternate;
+}
+
+/* ✨ Realistic shine reflection */
+.balloon::before {
+  content: "";
+  position: absolute;
+  top: 18%;
+  left: 22%;
+  width: 18px;
+  height: 28px;
+  background: rgba(245, 13, 13, 0.7);
+  border-radius: 50%;
+  transform: rotate(25deg);
+}
+
+/* colors */
+.red { background: #ff6b6b; left: 10px; animation-delay: 0s; }
+.yellow { background: #ffd166; left: 50px; animation-delay: 2s; }
+.pink { background: #ff99c8; left: 20px; animation-delay: 4s; }
+
+.blue { background: #4dabf7; left: 10px; animation-delay: 1s; }
+.purple { background: #b197fc; left: 50px; animation-delay: 3s; }
+.green { background: #63e6be; left: 20px; animation-delay: 5s; }
+
+/* floating animation */
+@keyframes floatUp {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-120vh);
+    opacity: 0;
+  }
+}
+/* 🎈 BALLOON FIX (VISIBLE & STATIC) */
+.balloons {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 120px;
+  z-index: 20; /* ABOVE CAKE */
+}
+
+.balloons.left {
+  left: 40px;
+}
+
+.balloons.right {
+  right: 40px;
+}
+
+.balloon {
+  position: absolute;
+  width: 50px;
+  height: 65px;
+  border-radius: 50% 50% 45% 45%;
+  box-shadow: inset -6px -10px rgba(0,0,0,0.15);
+}
+
+/* Balloon positions */
+.balloons .balloon:nth-child(1) { top: -80px; }
+.balloons .balloon:nth-child(2) { top: 0; left: 30px; }
+.balloons .balloon:nth-child(3) { top: 80px; }
+
+
+
+/* Colors */
+.red { background: #ff6b6b; }
+.yellow { background: #ffd166; }
+.blue { background: #4dabf7; }
+
+.green { background: #63e6be; }
+.purple { background: #b197fc; }
+.pink { background: #ff99c8; }
+
+/* 🎈 BALLOONS (STATIC POSITION, SOFT ANIMATION) */
+.balloons {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 160px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.balloons.left { left: 40px; }
+.balloons.right { right: 40px; }
+
+.balloon {
+  position: absolute;
+  width: 50px;
+  height: 65px;
+  border-radius: 50% 50% 45% 45%;
+  box-shadow: inset -6px -10px rgba(0,0,0,0.15);
+  animation: sway 4s ease-in-out infinite;
+}
+
+/* 🎈 Placement */
+.balloons .balloon:nth-child(1) { top: -120px; left: 20px; animation-delay: 0s; }
+.balloons .balloon:nth-child(2) { top: -40px; left: 60px; animation-delay: 1s; }
+.balloons .balloon:nth-child(3) { top: 40px; left: 10px; animation-delay: 2s; }
+.balloons .balloon:nth-child(4) { top: 120px; left: 50px; animation-delay: 3s; }
+.balloons .balloon:nth-child(5) { top: 200px; left: 20px; animation-delay: 4s; }
+
+/* 🎈 Colors */
+.red { background: #ff6b6b; }
+.yellow { background: #ffd166; }
+.blue { background: #4dabf7; }
+.green { background: #63e6be; }
+.purple { background: #b197fc; }
+.pink { background: #ff99c8; }
+
+/* 🎈 Gentle movement (NO FLOATING) */
+@keyframes sway {
+  0%   { transform: translateX(0) rotate(-2deg); }
+  50%  { transform: translateX(4px) rotate(2deg); }
+  100% { transform: translateX(0) rotate(-2deg); }
+}
+/* 🎁 Spotify Gift Section */
+.spotify-gift {
+  margin-top: 40px;
+  padding: 20px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  max-width: 360px;
+}
+
+.spotify-gift h2 {
+  margin-bottom: 8px;
+  font-size: 22px;
+}
+
+.spotify-gift p {
+  font-size: 14px;
+  opacity: 0.85;
+  margin-bottom: 16px;
+}
+
+/* Mobile fit */
+@media (max-width: 480px) {
+  .spotify-gift iframe {
+    width: 100%;
+    height: 360px;
+  }
+}
+.cake-wrapper {
+  margin-bottom: 50px;
+}
+
+.spotify-gift {
+  margin-top: 30px;
+}
+.cake-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 40px 0;
+  z-index: 2;
+}
+
+.spotify-gift {
+  margin-top: 60px;
+  z-index: 1;
+}
+
+.cake-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 40px 0 80px 0;
+}
+
+.cake-wrapper {
+  position: relative;
+  z-index: 3;
+}
+.cake-area {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 40px 0 20px;
+}
+
+.cake-wrapper {
+  position: relative;
+  z-index: 5;
+}
+
+.spotify-gift {
+  display: block;
+  margin: 60px auto 0;
+  z-index: 1;
+}
+/* 🎯 FORCE CENTER CAKE */
+.cake-content {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;          /* centers horizontally */
+  display: flex;
+  flex-direction: column;
+  align-items: center;     /* centers cake + text */
+  text-align: center;
+  z-index: 5;
+}
+.cake-content {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cake-wrapper {
+  margin: 20px auto 40px;  /* keeps cake centered */
+}
+/* 🎉 Birthday Title Glow */
+.birthday-title {
+  text-align: center;
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  color: #fff;
+  text-shadow:
+    0 0 10px rgba(255, 215, 0, 0.6),
+    0 0 20px rgba(255, 183, 3, 0.5),
+    0 0 40px rgba(255, 140, 0, 0.4);
+  animation: titleGlow 2.5s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+  0%, 100% {
+    text-shadow:
+      0 0 10px rgba(255, 215, 0, 0.5),
+      0 0 20px rgba(255, 183, 3, 0.4),
+      0 0 40px rgba(255, 140, 0, 0.3);
+  }
+  50% {
+    text-shadow:
+      0 0 20px rgba(255, 215, 0, 0.9),
+      0 0 35px rgba(255, 183, 3, 0.8),
+      0 0 60px rgba(255, 140, 0, 0.6);
+  }
+}
+/* ✨ ULTRA GOLD GLITTER RAIN */
+
+.glitter {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.glitter span {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff6c0, #ffd700, #ffb703);
+  box-shadow:
+    0 0 8px #ffd700,
+    0 0 16px #ffb703,
+    0 0 25px rgba(255, 183, 3, 0.9);
+  animation: glitterFall linear infinite;
+  opacity: 0.95;
+}
+
+/* Falling animation */
+@keyframes glitterFall {
+  0% {
+    transform: translateY(-10vh) scale(0.5);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) scale(1);
+    opacity: 0;
+  }
+}
+/* 🐾 BIG SIDE ANIMALS */
+
+.animals {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 90px;        /* BIG */
+  letter-spacing: -18px;  /* Close together */
+  z-index: 5;
+  animation: animalBounce 3s ease-in-out infinite;
+}
+
+/* Left */
+.left-animals {
+  left: -220px;
+}
+
+/* Right */
+.right-animals {
+  right: -220px;
+}
+
+/* Soft bounce */
+@keyframes animalBounce {
+  0%,100% { transform: translateY(-50%) translateY(0); }
+  50% { transform: translateY(-50%) translateY(-15px); }
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+  .animals {
+    font-size: 50px;
+    left: -120px;
+    right: -120px;
+  }
+}
+.animals {
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}
+h1 {
+  animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+  from {
+    text-shadow: 0 0 10px gold, 0 0 20px gold;
+  }
+  to {
+    text-shadow: 0 0 25px gold, 0 0 40px gold;
+  }
+}
+.cake-svg:hover {
+  filter: drop-shadow(0 0 20px gold);
+}
+/* 🎈 Balloon Shine Effect */
+.balloon {
+  position: absolute;
+  width: 60px;
+  height: 75px;
+  border-radius: 50% 50% 45% 45%;
+  box-shadow: inset -8px -12px rgba(0,0,0,0.15),
+              0 0 15px rgba(255, 215, 0, 0.4); /* golden glow */
+  animation: sway 4s ease-in-out infinite;
+}
+
+/* ✨ Light reflection */
+.balloon::before {
+  content: "";
+  position: absolute;
+  top: 15%;
+  left: 25%;
+  width: 15px;
+  height: 25px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 50%;
+  transform: rotate(25deg);
+}
+
+/* 🌟 Soft shimmer animation */
+@keyframes balloonShine {
+  0% {
+    box-shadow: inset -8px -12px rgba(0,0,0,0.15),
+                0 0 10px rgba(255, 215, 0, 0.3);
+  }
+  100% {
+    box-shadow: inset -8px -12px rgba(0,0,0,0.15),
+                0 0 25px rgba(255, 215, 0, 0.8);
+  }
+}
+
+.balloon {
+  animation: sway 4s ease-in-out infinite,
+             balloonShine 2s infinite alternate;
+}
+
+/* 🎈 SUPER GOLD STRING FIX */
+#cake-section .balloon::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 4px;
+  height: 65px;
+  transform: translateX(-50%);
+
+  background: linear-gradient(
+    to bottom,
+    #fff9c4 0%,
+    #ffd700 30%,
+    #ffcc00 60%,
+    #e6b800 100%
+  );
+
+  box-shadow:
+    0 0 12px rgba(255,215,0,1),
+    0 0 20px rgba(255,200,0,0.8);
+
+  z-index: 10;
+}
+
+
+
+
+</style>
+</head>
+
+<body>
+<audio id="bg-music" loop>
+  <source src="aud.mp3" type="audio/mpeg">
+</audio>
+
+
+<!-- 🌳 TREE SECTION -->
+<div id="tree-section">
+
+  <div id="text">
+    <div id="code">
+      <span>Wishing you a beautiful day 💫</span><br />
+      <span>Happy Birthday 🎉</span><br/>
+      <span>May your heart be full of joy ❤️</span><br />
+    </div>
+  </div>
+
+  <canvas id="canvas" width="1100" height="680"></canvas>
+
+</div>
+
+<!-- 🎂 CAKE SECTION -->
+<!-- 🎂 CAKE SECTION -->
+<div id="cake-section">
+
+  <!-- 🎈 LEFT BALLOONS -->
+  <div class="balloons left">
+    <div class="balloon red"></div>
+    <div class="balloon yellow"></div>
+    <div class="balloon blue"></div>
+    <div class="balloon pink"></div>
+    <div class="balloon purple"></div>
+  </div>
+
+  <!-- 🎈 RIGHT BALLOONS -->
+  <div class="balloons right">
+    <div class="balloon green"></div>
+    <div class="balloon purple"></div>
+    <div class="balloon pink"></div>
+    <div class="balloon yellow"></div>
+    <div class="balloon red"></div>
+  </div>
+
+  <!-- 🎯 CENTER CONTENT -->
+  <div class="cake-content">
+<!-- 🐾 LEFT ANIMALS -->
+<div class="animals left-animals">
+  🐶🐱🐰🐹
+</div>
+
+<!-- 🐾 RIGHT ANIMALS -->
+<div class="animals right-animals">
+  🐼🐻🐨🦊
+</div>
+
+    <h1 class="birthday-title">
+  Happiest Birthday Prerna 🎂
+</h1>
+
+    <p class="cake-sub">Tap the cake and make a wish ✨</p>
+
+    <!-- 🎂 CAKE -->
+    <div class="cake-wrapper">
+      <svg width="260" height="240" viewBox="0 0 260 240" class="cake-svg">
+
+        <!-- Shadow -->
+        <ellipse cx="130" cy="215" rx="70" ry="10" fill="rgba(0,0,0,0.4)"/>
+
+        <!-- Cake base -->
+        <rect x="55" y="120" width="150" height="80" rx="20" fill="#ffcc5c"/>
+
+        <!-- Icing -->
+        <path d="M55 120 
+                 Q75 135 95 120 
+                 Q115 135 135 120 
+                 Q155 135 175 120 
+                 Q195 135 205 120 
+                 L205 95 L55 95 Z"
+              fill="#fff"/>
+
+        <!-- Sprinkles -->
+        <circle cx="90" cy="135" r="3" fill="#ff5d8f"/>
+        <circle cx="130" cy="140" r="3" fill="#ffd166"/>
+        <circle cx="170" cy="135" r="3" fill="#06d6a0"/>
+
+        <!-- Candles -->
+        <g class="candle">
+          <rect x="95" y="55" width="8" height="40" rx="3" fill="#fff"/>
+          <circle class="flame" cx="99" cy="48" r="6"/>
+        </g>
+
+        <g class="candle">
+          <rect x="120" y="55" width="8" height="40" rx="3" fill="#fff"/>
+          <circle class="flame" cx="124" cy="48" r="6"/>
+        </g>
+
+        <g class="candle">
+          <rect x="145" y="55" width="8" height="40" rx="3" fill="#fff"/>
+          <circle class="flame" cx="149" cy="48" r="6"/>
+        </g>
+
+      </svg>
     </div>
 
-    <script>
-      (function () {
-        var canvas = $("#canvas");
 
-        if (!canvas[0].getContext) {
-          $("#error").show();
-          return false;
-        }
+    <!-- 🎁 SPOTIFY GIFT -->
+    <div class="spotify-gift">
+      <h2>🎧 A Playlist Made Just for You</h2>
+      <p>For every smile, every memory, every moment 💖</p>
 
-        var width = canvas.width();
-        var height = canvas.height();
-        canvas.attr("width", width);
-        canvas.attr("height", height);
+      <iframe
+        src="https://open.spotify.com/embed/playlist/0cHFdauy9376fcCsmOJBvh"
+        width="320"
+        height="380"
+        frameborder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy">
+      </iframe>
+    </div>
 
-        var opts = {
-          seed: {
-            x: width / 2 - 20,
-            color: "rgb(190, 26, 37)",
-            scale: 2,
-          },
-          branch: [
-            [
-              535,
-              680,
-              570,
-              250,
-              500,
-              200,
-              30,
-              100,
-              [
-                [
-                  540,
-                  500,
-                  455,
-                  417,
-                  340,
-                  400,
-                  13,
-                  100,
-                  [[450, 435, 434, 430, 394, 395, 2, 40]],
-                ],
-                [
-                  550,
-                  445,
-                  600,
-                  356,
-                  680,
-                  345,
-                  12,
-                  100,
-                  [[578, 400, 648, 409, 661, 426, 3, 80]],
-                ],
-                [539, 281, 537, 248, 534, 217, 3, 40],
-                [
-                  546,
-                  397,
-                  413,
-                  247,
-                  328,
-                  244,
-                  9,
-                  80,
-                  [
-                    [427, 286, 383, 253, 371, 205, 2, 40],
-                    [498, 345, 435, 315, 395, 330, 4, 60],
-                  ],
-                ],
-                [
-                  546,
-                  357,
-                  608,
-                  252,
-                  678,
-                  221,
-                  6,
-                  100,
-                  [[590, 293, 646, 277, 648, 271, 2, 80]],
-                ],
-              ],
-            ],
-          ],
-          bloom: {
-            num: 700,
-            width: 1080,
-            height: 650,
-          },
-          footer: {
-            width: 1200,
-            height: 5,
-            speed: 10,
-          },
-        };
+  </div>
+</div>
 
-        var tree = new Tree(canvas[0], width, height, opts);
-        var seed = tree.seed;
-        var foot = tree.footer;
-        var hold = 1;
 
-        canvas
-          .click(function (e) {
-            playAudio();
-            var offset = canvas.offset(),
-              x,
-              y;
-            x = e.pageX - offset.left;
-            y = e.pageY - offset.top;
-            if (seed.hover(x, y)) {
-              hold = 0;
-              canvas.unbind("click");
-              canvas.unbind("mousemove");
-              canvas.removeClass("hand");
-            }
-          })
-          .mousemove(function (e) {
-            var offset = canvas.offset(),
-              x,
-              y;
-            x = e.pageX - offset.left;
-            y = e.pageY - offset.top;
-            canvas.toggleClass("hand", seed.hover(x, y));
-          });
 
-        var seedAnimate = eval(
-          Jscex.compile("async", function () {
-            seed.draw();
-            while (hold) {
-              $await(Jscex.Async.sleep(10));
-            }
-            while (seed.canScale()) {
-              seed.scale(0.95);
-              $await(Jscex.Async.sleep(10));
-            }
-            while (seed.canMove()) {
-              seed.move(0, 2);
-              foot.draw();
-              $await(Jscex.Async.sleep(10));
-            }
-          })
-        );
+<script>
+/* ===== YOUR ORIGINAL TREE CODE (UNCHANGED) ===== */
+(function () {
 
-        var growAnimate = eval(
-          Jscex.compile("async", function () {
-            do {
-              tree.grow();
-              $await(Jscex.Async.sleep(10));
-            } while (tree.canGrow());
-          })
-        );
+  var canvas = $("#canvas");
 
-        var flowAnimate = eval(
-          Jscex.compile("async", function () {
-            do {
-              tree.flower(2);
-              $await(Jscex.Async.sleep(10));
-            } while (tree.canFlower());
-          })
-        );
+  if (!canvas[0].getContext) {
+    alert("Canvas not supported");
+    return;
+  }
 
-        var moveAnimate = eval(
-          Jscex.compile("async", function () {
-            tree.snapshot("p1", 240, 0, 610, 680);
-            while (tree.move("p1", 500, 0)) {
-              foot.draw();
-              $await(Jscex.Async.sleep(10));
-            }
-            foot.draw();
-            tree.snapshot("p2", 500, 0, 610, 680);
+  var width = canvas.width();
+  var height = canvas.height();
+  canvas.attr("width", width);
+  canvas.attr("height", height);
 
-            canvas
-              .parent()
-              .css("background", "url(" + tree.toDataURL("image/png") + ")");
-            canvas.css("background", "#ffe");
-            $await(Jscex.Async.sleep(300));
-            canvas.css("background", "none");
-          })
-        );
+  var opts = {
+    seed: { x: width / 2 - 20, color: "rgb(190, 26, 37)", scale: 2 },
+    branch: [
+      [535,680,570,250,500,200,30,100,[
+        [540,500,455,417,340,400,13,100,[[450,435,434,430,394,395,2,40]]],
+        [550,445,600,356,680,345,12,100,[[578,400,648,409,661,426,3,80]]],
+        [539,281,537,248,534,217,3,40],
+        [546,397,413,247,328,244,9,80,[
+          [427,286,383,253,371,205,2,40],
+          [498,345,435,315,395,330,4,60]
+        ]]
+      ]]
+    ],
+    bloom: { num: 700, width: 1080, height: 650 },
+    footer: { width: 1200, height: 5, speed: 10 }
+  };
 
-        var textAnimate = eval(
-          Jscex.compile("async", function () {
-            $("#code").show().typewriter();
-          })
-        );
+  var tree = new Tree(canvas[0], width, height, opts);
+  var seed = tree.seed;
+  var foot = tree.footer;
+  var hold = 1;
 
-        var runAsync = eval(
-          Jscex.compile("async", function () {
-            $await(seedAnimate());
-            $await(growAnimate());
-            $await(flowAnimate());
-            $await(moveAnimate());
-            textAnimate().start();
-          })
-        );
+  canvas.click(function () {
+  hold = 0;
 
-        runAsync().start();
-      })();
-    </script>
-  </body>
+  // 🎵 play background music on first interaction
+  var music = document.getElementById("bg-music");
+  if (music && music.paused) {
+    music.play().catch(function(){});
+  }
+});
+
+
+  var seedAnimate = eval(Jscex.compile("async", function () {
+    seed.draw();
+    while (hold) { $await(Jscex.Async.sleep(10)); }
+    while (seed.canScale()) {
+      seed.scale(0.95);
+      $await(Jscex.Async.sleep(10));
+    }
+    while (seed.canMove()) {
+      seed.move(0, 2);
+      foot.draw();
+      $await(Jscex.Async.sleep(10));
+    }
+  }));
+
+  var growAnimate = eval(Jscex.compile("async", function () {
+    do {
+      tree.grow();
+      $await(Jscex.Async.sleep(10));
+    } while (tree.canGrow());
+  }));
+
+  var flowAnimate = eval(Jscex.compile("async", function () {
+    do {
+      tree.flower(2);
+      $await(Jscex.Async.sleep(10));
+    } while (tree.canFlower());
+  }));
+
+  var moveAnimate = eval(Jscex.compile("async", function () {
+    tree.snapshot("p1", 240, 0, 610, 680);
+    while (tree.move("p1", 500, 0)) {
+      foot.draw();
+      $await(Jscex.Async.sleep(10));
+    }
+    foot.draw();
+  }));
+
+  var runAsync = eval(Jscex.compile("async", function () {
+    $await(seedAnimate());
+    $await(growAnimate());
+    $await(flowAnimate());
+    $await(moveAnimate());
+    $("#code").fadeIn(1200);
+  }));
+
+  runAsync().start();
+
+})();
+// 🎂 Cake tap animation
+$("#cake-svg").on("click", function () {
+  $(this).css("transform", "scale(1.08)");
+  setTimeout(() => {
+    $("#cake-svg").css("transform", "scale(1)");
+  }, 200);
+});
+
+  
+</script>
+
+</script>
+<div class="glitter">
+  <span style="left:10%; animation-duration:6s;"></span>
+  <span style="left:20%; animation-duration:8s;"></span>
+  <span style="left:30%; animation-duration:7s;"></span>
+  <span style="left:40%; animation-duration:9s;"></span>
+  <span style="left:50%; animation-duration:6.5s;"></span>
+  <span style="left:60%; animation-duration:8.5s;"></span>
+  <span style="left:70%; animation-duration:7.5s;"></span>
+  <span style="left:80%; animation-duration:9s;"></span>
+  <span style="left:90%; animation-duration:6s;"></span>
+  <span style="left:5%; animation-duration:6s;"></span>
+  <span style="left:10%; animation-duration:8s;"></span>
+  <span style="left:15%; animation-duration:7s;"></span>
+  <span style="left:20%; animation-duration:9s;"></span>
+  <span style="left:25%; animation-duration:6.5s;"></span>
+  <span style="left:30%; animation-duration:8.5s;"></span>
+  <span style="left:35%; animation-duration:7.5s;"></span>
+  <span style="left:40%; animation-duration:9s;"></span>
+  <span style="left:45%; animation-duration:6s;"></span>
+  <span style="left:50%; animation-duration:7s;"></span>
+  <span style="left:55%; animation-duration:8s;"></span>
+  <span style="left:60%; animation-duration:6.8s;"></span>
+  <span style="left:65%; animation-duration:7.3s;"></span>
+  <span style="left:70%; animation-duration:8.2s;"></span>
+  <span style="left:75%; animation-duration:6.4s;"></span>
+  <span style="left:80%; animation-duration:9.5s;"></span>
+  <span style="left:85%; animation-duration:7.7s;"></span>
+  <span style="left:90%; animation-duration:8.1s;"></span>
+  <span style="left:95%; animation-duration:6.9s;"></span>
+  <span style="left:12%; animation-duration:10s;"></span>
+  <span style="left:28%; animation-duration:11s;"></span>
+  <span style="left:42%; animation-duration:9.8s;"></span>
+  <span style="left:58%; animation-duration:10.5s;"></span>
+  <span style="left:73%; animation-duration:11.3s;"></span>
+  <span style="left:88%; animation-duration:10.7s;"></span>
+</div>
+
+</body>
+<script>
+  const glitterContainer = document.createElement("div");
+  glitterContainer.className = "glitter";
+  document.body.appendChild(glitterContainer);
+
+  for (let i = 0; i < 80; i++) {
+    const sparkle = document.createElement("span");
+
+    const size = Math.random() * 6 + 4; // 4px to 10px
+    sparkle.style.width = size + "px";
+    sparkle.style.height = size + "px";
+
+    sparkle.style.left = Math.random() * 100 + "%";
+    sparkle.style.animationDuration = (Math.random() * 6 + 5) + "s";
+    sparkle.style.animationDelay = Math.random() * 5 + "s";
+
+    glitterContainer.appendChild(sparkle);
+  }
+</script>
+
 </html>
+
+
+
+
+
+
+
